@@ -31,9 +31,7 @@ export default function AdminCreateUser() {
   }, []);
 
   const isReadOnly = (fieldName) => {
-    if (!formData.username.trim()) {
-      return fieldName !== 'username';
-    }
+    if (!formData.username.trim()) return fieldName !== 'username';
     return fieldName !== 'username' && !!userMockData[formData.username.toLowerCase()];
   };
 
@@ -46,10 +44,7 @@ export default function AdminCreateUser() {
     if (name === 'username') {
       const lowerValue = value.toLowerCase();
       if (userMockData[lowerValue]) {
-        setFormData({
-          username: value,
-          ...userMockData[lowerValue],
-        });
+        setFormData({ username: value, ...userMockData[lowerValue] });
       } else {
         setFormData({
           username: value,
@@ -72,12 +67,13 @@ export default function AdminCreateUser() {
   };
 
   const handleSubmit = () => {
-    const usernameLower = formData.username.toLowerCase();
-
-    if (!formData.username.trim()) {
-      alert('Username is required');
+    const requiredFields = Object.entries(formData).filter(([key, value]) => !value.trim());
+    if (requiredFields.length > 0) {
+      alert(`Please fill all the fields before submitting.`);
       return;
     }
+
+    const usernameLower = formData.username.toLowerCase();
 
     const newUserMockData = {
       ...userMockData,
